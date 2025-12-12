@@ -57,31 +57,15 @@ def run():
         page = context.new_page()
 
         page.goto(URL, wait_until="networkidle")
-        
-        # Wait for the iframe to be attached to the DOM
-        page.wait_for_selector("iframe#scrl", state="attached", timeout=30000)
-        
-        # Get the iframe element and wait for it to load
-        iframe_element = page.locator("iframe#scrl")
-        iframe_element.wait_for(state="visible", timeout=30000)
-        
-        # Get the frame and wait for it to be ready
+
+        # Form is inside iframe#scrl
         frame = page.frame_locator("iframe#scrl")
-        
-        # Wait for the form container to be visible inside the iframe
-        frame.locator("#form-container").wait_for(state="visible", timeout=30000)
-        
-        # Wait for the first input field to be visible and ready
-        frame.locator("#cust_name").wait_for(state="visible", timeout=30000)
 
         for idx, t in enumerate(TICKETS, start=1):
             print(f"Submitting ticket #{idx}")
 
-            # Fill text inputs - add explicit waits before each fill
-            frame.locator("#cust_name").wait_for(state="visible", timeout=10000)
+            # Fill text inputs
             frame.locator("#cust_name").fill(t["cust_name"])
-            
-            frame.locator("#email").wait_for(state="visible", timeout=10000)
             frame.locator("#email").fill(t["email"])
 
             # Service type options load dynamically
@@ -94,17 +78,11 @@ def run():
             issue_val = select_first_real_option(frame, "#issue_type")
             print(f"Selected issue_type value: {issue_val}")
 
-            frame.locator("#subject").wait_for(state="visible", timeout=10000)
             frame.locator("#subject").fill(t["subject"])
-            
-            frame.locator("#description").wait_for(state="visible", timeout=10000)
             frame.locator("#description").fill(t["description"])
-            
-            frame.locator("#contact").wait_for(state="visible", timeout=10000)
             frame.locator("#contact").fill(t["contact"])
 
             # Submit
-            frame.locator("#submit").wait_for(state="visible", timeout=10000)
             frame.locator("#submit").click()
 
             # Wait a bit for submit to process
@@ -113,9 +91,6 @@ def run():
             # Reload for next ticket (optional)
             if idx < len(TICKETS):
                 page.reload(wait_until="networkidle")
-                # Wait for iframe again after reload
-                page.wait_for_selector("iframe#scrl", state="attached", timeout=30000)
-                frame.locator("#form-container").wait_for(state="visible", timeout=30000)
                 time.sleep(2)
 
         browser.close()
