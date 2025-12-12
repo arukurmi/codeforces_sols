@@ -10,8 +10,7 @@ TICKETS = [
         "subject": "No response from support – urgent help needed",
         "description": "Tried calling multiple times but no response. Please contact ASAP.",
         "contact": "6377080740",
-    },
-    # Add more dicts here for more tickets
+    }
 ]
 
 def wait_dropdown_has_options(frame_locator, selector: str, min_options: int = 2, timeout_ms: int = 15000):
