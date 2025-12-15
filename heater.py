@@ -1,4 +1,10 @@
-
+"""Heater
+A program that spawns as much number of processes as there are CPUs on the computer.
+This keeps the core temprature high.
+I made this so that my fingers feel more comfortable while working on my laptop during winter.
+Caution : An eye should be kept on the CPU temprature so that when it is getting too hot, 
+the prgoram needs to be killed; else it can damage the CPU.
+"""
 import multiprocessing
 import sys
 
