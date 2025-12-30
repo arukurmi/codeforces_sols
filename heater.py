@@ -16,7 +16,6 @@ def round_robin_count():
 		else:
 			number = number + 1
 
-
 if __name__ == "__main__":
 	if len(sys.argv) == 2 and sys.argv[1] == '--about':
 		print(__doc__)
