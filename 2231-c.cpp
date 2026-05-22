@@ -5,45 +5,72 @@ void solve() {
     int n;
     cin >> n;
 
-    map<long long, long long> total_costs;
-    map<long long, int> contributors;
+    vector<pair<int, int>> states;
+    states.reserve(n * 35);
 
     for (int i = 0; i < n; i++) {
-        long long x;
+        int x;
         cin >> x;
 
-        long long cost = 0;
-        while (x != 1) {
-            if (x % 2 == 0) {
-                total_costs[x] += cost;
-                contributors[x]++;
-                x /= 2;
-                cost++;
-            } else {
-                x++;
-                cost++;
+        int cost = 0;
+
+        while (true) {
+            states.push_back({x, cost});
+
+            if (x == 1) {
+                states.push_back({2, cost + 1});
+                break;
             }
+
+            if (x == 2) {
+                states.push_back({1, cost + 1});
+                break;
+            }
+
+            if (x % 2 == 0) {
+                x /= 2;
+            } else {
+                x += 1;
+            }
+
+            cost++;
         }
-        total_costs[1] += cost;
-        contributors[1]++;
     }
+
+    sort(states.begin(), states.end());
 
     long long ans = LLONG_MAX;
-    for (auto& [val, cost] : total_costs) {
-        if (contributors[val] == n)
-            ans = min(ans, cost);
+
+    int i = 0;
+    while (i < (int)states.size()) {
+        int value = states[i].first;
+        long long totalCost = 0;
+        int contributors = 0;
+
+        while (i < (int)states.size() && states[i].first == value) {
+            totalCost += states[i].second;
+            contributors++;
+            i++;
+        }
+
+        if (contributors == n) {
+            ans = min(ans, totalCost);
+        }
     }
 
-    cout << ans << "\n";
+    cout << ans << '\n';
 }
 
 int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
 
     int t;
     cin >> t;
-    while (t--) solve();
+
+    while (t--) {
+        solve();
+    }
 
     return 0;
 }
